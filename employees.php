@@ -22,5 +22,7 @@
 		$("#main-content-container").load("./subpages/employees/load_employee_profile.php?employee_id="+employee_id);
 	}
 
-	load_employee();
+	// load_employee();
+	load_employee_profile(1);
+	// load_add_employee();
 </script>
