@@ -1,7 +1,7 @@
-// $('.timepicker').timepicker({
-//   showInputs: false,
-//   timeFormat: 'HH:mm'
-// });
+$('.timepicker').timepicker({
+  showInputs: false,
+  timeFormat: 'HH:mm'
+});
 
 var finalEmpData = {
   firstname: empData.firstname,
@@ -15,7 +15,6 @@ var finalEmpData = {
   position: empData.position_id,
   employee_id: empData.emp_id
 };
-
 
 $('.from-time').val('8:00 AM');
 $('.to-time').val('5:00 PM');

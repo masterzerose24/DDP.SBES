@@ -2,7 +2,7 @@
 	$user_id = $_GET['employee_id'];
 	include('../../includes/module.php');
 
-	$sql = "SELECT 
+	$sql = "SELECT
 				COALESCE(project_name, 'NONE'),
 				position_name,
 				fnFormatUserId(employee_id),
@@ -10,7 +10,7 @@
 				IF(employee_imagepath NOT IN ('', 'BLANK'), employee_imagepath  ,  ''),
 				employee_wage,
 				employee_empstatus,
-				IF(employee_remarks != '', employee_remarks  ,  'NONE')				
+				IF(employee_remarks != '', employee_remarks  ,  'NONE')
 			FROM rec_employees re
 			LEFT JOIN rec_projects rp
 				ON re.project_id = rp.project_id
@@ -20,7 +20,7 @@
 	$sql = $con->prepare($sql);
 	$sql->bind_param('i', $user_id);
 	$sql->execute();
-	$sql->bind_result(	
+	$sql->bind_result(
 		$project_name,
 		$position_name,
 		$employee_id,
@@ -124,7 +124,7 @@
 	<?php
 	}
 	?>
-	
+
 			<div class="row">
 				<div class="col-xs-12 plr10">
 					<div class="col-xs-12 col-sm-6 col-md-4 plr5">
@@ -139,7 +139,7 @@
 									<label class="mt10">BONUSES</label>
 								</div>
 								<div class="col-xs-12" id="bonuses-container">
-									
+
 								</div>
 							</div>
 							<div class="row">
@@ -148,7 +148,7 @@
 									<label class="mt10">DEDUCTIONS</label>
 								</div>
 								<div class="col-xs-12" id="deductions-container">
-									
+
 								</div>
 							</div>
 						</div>
@@ -253,9 +253,9 @@
 						<h4 class="mt0 mb0"><small><i class="fa fa-clock-o"></i> SCHEDULE DETAILS</small></h4>
 					</div>
 				</div>
-				
+
 				<div id="schedule-container">
-					
+
 				</div>
 			</div>
 		</div>
@@ -280,7 +280,7 @@
 		data:{'emp_id': emp_id},
 		dataType: 'json',
 		success: function(response){
-			
+
 			$.each(response.values, function(key, v){
 				cbox = 	'<label class="label-data">' + v.bonus_name + '</option>';
 				$('#bonuses-container').append(cbox);
@@ -295,7 +295,7 @@
 		success: function(response){
 			// var cbox;
 			$.each(response.values, function(key, v){
-				cbox = 	'<label class="label-data">' + v.deduction_name + '</option>';				
+				cbox = 	'<label class="label-data">' + v.deduction_name + '</option>';
 				$('#deductions-container').append(cbox);
 			});
 		}
@@ -306,7 +306,6 @@
 		data:{'emp_id': emp_id},
 		dataType: 'json',
 		success: function(response){
-			console.log('GetUserSchedule: ' + response);
 			// var cbox;
 			$.each(response.values, function(key, v){
 				time = v.empschedule_in + ' - ' + v.empschedule_out;

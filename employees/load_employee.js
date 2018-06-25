@@ -5,13 +5,11 @@ $('.timepicker').timepicker({showInputs: false});
 	function submitNewEmployee(){
         $('#submit-btn').click();
         var values = $('#form-new_employee').serializeArray();
-        console.log(values);
-        e.preventDefault();        
+        e.preventDefault();
 	}
 
 	$('#form-new_employee').submit(function(e){
-        var values = $(this).serializeArray();        
-        console.log(values);
+        var values = $(this).serializeArray();
         e.preventDefault();
 		$.ajax({
 			url : "http://localhost/sbes/api?q=InsertNewEmployee",
@@ -33,7 +31,7 @@ $('.timepicker').timepicker({showInputs: false});
 			$('.bonuses-list').empty();
 			var cbox;
 			$.each(response.values, function(key, v){
-				cbox = 	'<label class="label-data">' + 
+				cbox = 	'<label class="label-data">' +
 						'<input type="checkbox" name="bonus[]" value="'+v.bonus_id+'"  checked/> ' +  v.bonus_name +
 						'</label>';
 				$('.bonuses-list').append(cbox);
@@ -48,7 +46,7 @@ $('.timepicker').timepicker({showInputs: false});
 		success: function(response){
 			var cbox;
 			$.each(response.values, function(key, v){
-			cbox = 	'<label class="label-data">' + 
+			cbox = 	'<label class="label-data">' +
 					'<input type="checkbox" name="deduction[]" value="'+v.deduction_id+'"  checked/> ' +  v.deduction_name +
 					'</label>';
 
@@ -86,6 +84,6 @@ $('.timepicker').timepicker({showInputs: false});
 	$('.my-cb').click(function(){
 		var idx = $(this).data('index');
 		var isDisabled = !$(this).prop('checked');
-		$($('.from-time')[idx]).prop('disabled', isDisabled);		
+		$($('.from-time')[idx]).prop('disabled', isDisabled);
 		$($('.to-time')[idx]).prop('disabled', isDisabled);
 	});

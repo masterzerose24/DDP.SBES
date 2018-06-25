@@ -1,6 +1,6 @@
-// $('.timepicker').timepicker({
-// 	showInputs: false
-// });
+$('.timepicker').timepicker({
+	showInputs: false
+});
 
 var empBonusData = [];
 var empDeductionData = [];

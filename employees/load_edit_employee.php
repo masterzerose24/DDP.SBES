@@ -2,6 +2,7 @@
 #employee_avatar_display
 {
 	transition:all 200ms ease-in-out;
+	background: #676767;
 }
 .img-remove-btn
 {
@@ -12,16 +13,18 @@
     color: white;
 }
 </style>
+
+
 <div class="row">
 	<div class="col-xs-12 col-md-6">
-		<h4>REGISTER NEW EMPLOYEE</h4>
+		<h4 id="update-label">UPDATE EMPLOYEE</h4>
 	</div>
 	<div class="col-xs-12 col-md-6">
-		<a onclick="load_employee();" href="javascript:void(0);">
-			<h5 class="pull-right"><i class="fa fa-chevron-left"></i> RETURN TO LIST&emsp;</h5>
+		<a onclick="return_to_emp_profile();" href="javascript:void(0);">
+			<h5 class="pull-right"><i class="fa fa-chevron-left"></i> RETURN TO EMPLOYEE DETAIL&emsp;</h5>
 		</a>
-		<a onclick="submitNewEmployee()" href="javascript:void(0);">
-			<h5 class="pull-right"><i class="fa fa-check"></i> REGISTER EMPLOYEE&emsp;|&emsp;</h5>
+		<a onclick="submitUpdatedEmployee()" href="javascript:void(0);">
+			<h5 class="pull-right"><i class="fa fa-check"></i> UPDATE EMPLOYEE&emsp;|&emsp;</h5>
 		</a>
 	</div>
 </div>
@@ -56,10 +59,10 @@
 										<div class="col-xs-12">
 											<div class="col-xs-12 plr0">
 												<label class="mt5 mb0">AVATAR</label>
-												<input type="file" name="image" id="employee_avatar" class="hidden"  accept="image/*"/>
+												<input type="file" name="imageAvatar" id="employee_avatar" class="hidden"  accept="image/*"/>
 												<p id="employee_avatar_remove_cont" style="position: absolute; right:0; margin:0px;"></p>
 												<label for="employee_avatar" style="width:100%; display:absolute;">
-													<div id="employee_avatar_display" class="img img100" style="background:url('https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png') #676767;">
+													<div id="employee_avatar_display" class="img img100">
 													</div>
 												</label>
 											</div>
@@ -116,9 +119,10 @@
 												class="form-control"
 												name="status"
 											>
-												<option>Contractual</option>
-												<option>Job Order</option>
-												<option>Regular</option>
+												<option value="CONTRACTUAL">CONTRACTUAL</option>
+												<option value="JOB ORDER">JOB ORDER</option>
+												<option value="REGULAR">REGULAR</option>
+												<option value="SUSPENDED">SUSPENDED</option>
 											</select>
 										</div>
 										<div class="col-xs-12 col-md-4 plr5">
@@ -208,18 +212,18 @@
 					$days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 					foreach ($days as $key => $value) {
 						?>
-						<div class="row">
+						<div class="row " >
 							<div class="col-xs-12 plr10">
 								<div class="col-xs-12 plr5">
 									<label class="mt10 mb0 my-cb-label"><?=$value?>
-										<input type="checkbox" class="my-cb" name="schedule_days[]" data-index=<?=$key?> value="<?=$value?>" checked>
+										<input type="checkbox" class="my-cb" name="schedule_days[]" data-index=<?=$key?> value="<?=$value?>">
 										<span></span>
 									</label>
 								</div>
 								<div class="col-xs-6 plr5 bootstrap-timepicker">
 									<h5 class="mt5 mb5"><small>FROM</small></h5>
 									<div class="input-group">
-										<input type="text" class="form-control timepicker from-time" name="time-from[]">
+										<input type="text" class="form-control timepicker from-time <?= $value?>" name="time-from[]" disabled>
 										<div class="input-group-addon">
 											<i class="fa fa-clock-o"></i>
 										</div>
@@ -228,7 +232,7 @@
 								<div class="col-xs-6 plr5 bootstrap-timepicker">
 									<h5 class="mt5 mb5"><small>TO</small></h5>
 									<div class="input-group">
-										<input type="text" class="form-control timepicker to-time" name="time-to[]">
+										<input type="text" class="form-control timepicker to-time <?= $value?>" name="time-to[]" disabled>
 										<div class="input-group-addon">
 											<i class="fa fa-clock-o"></i>
 										</div>
@@ -240,7 +244,9 @@
 						<?php
 					}
 				?>
+					<div id="for-hidden-data">
 
+					</div>
 			</div>
 		</div>
 	</div>
@@ -256,161 +262,5 @@
 	</div>
 </div>
 
-<script type="text/javascript" >
-	$('.timepicker').timepicker({
-		showInputs: false,
-		timeFormat: 'HH:mm'
-	});
-	$('.from-time').val('8:00 AM');
-	$('.to-time').val('5:00 PM');
-
-	function addAdditionalDetails(emp_id, val){
-		$.ajax({
-			url : "http://localhost/sbes/api?q=InsertDeductions&emp_id="+emp_id,
-			method: "POST",
-			data: val,
-			dataType: 'json'
-        });
-		$.ajax({
-			url : "http://localhost/sbes/api?q=InsertBonuses&emp_id="+emp_id,
-			method: "POST",
-			data: val,
-			dataType: 'json'
-        });
-		$.ajax({
-			url : "http://localhost/sbes/api?q=InsertSchedule&emp_id="+emp_id,
-			method: "POST",
-			data: val,
-			dataType: 'json'
-        });
-
-		alert("Employee Added!");
-		load_employee();
-	}
-
-	function submitNewEmployee(){
-        $('#submit-btn').click();
-	}
-
-	$('#form-new_employee').submit(function(e){
-        var values = $(this).serializeArray();
-		$.ajax({
-			url : "http://localhost/sbes/api?q=InsertNewEmployee",
-			method: "POST",
-			data: values,
-			dataType: 'json',
-			success: function(response){
-				var emp_id = response.values[0].emp_id;
-
-				addAdditionalDetails(emp_id, values);
-
-			}
-        });
-        e.preventDefault();
-	});
-
-	$.ajax({
-		url : "http://localhost/sbes/api?q=GetBonuses",
-		method: "POST",
-		dataType: 'json',
-		success: function(response){
-			$('.bonuses-list').empty();
-			var cbox;
-			$.each(response.values, function(key, v){
-				cbox = 	'<label class="label-data">' +
-						'<input type="checkbox" name="bonus[]" value="'+v.bonus_id+'"  checked/> ' +  v.bonus_name +
-						'</label>';
-				$('.bonuses-list').append(cbox);
-			});
-		}
-	});
-
-	$.ajax({
-		url : "http://localhost/sbes/api?q=GetDeductions",
-		method: "POST",
-		dataType: 'json',
-		success: function(response){
-			var cbox;
-			$.each(response.values, function(key, v){
-			cbox = 	'<label class="label-data">' +
-					'<input type="checkbox" name="deduction[]" value="'+v.deduction_id+'"  checked/> ' +  v.deduction_name +
-					'</label>';
-
-			$('.deduction-list').append(cbox);
-			});
-		}
-	});
-
-	$.ajax({
-		url : "http://localhost/sbes/api?q=GetApprovedProjects",
-		method: "POST",
-		dataType: 'json',
-		success: function(response){
-			var cbox;
-			$.each(response.values, function(key, v){
-			cbox = 	'<option value="'+v.project_id+'">' + v.project_name + '</option>';
-			$('#assignment').append(cbox);
-			});
-		}
-	});
-
-	$.ajax({
-		url : "http://localhost/sbes/api?q=GetAllPositions",
-		method: "POST",
-		dataType: 'json',
-		success: function(response){
-			var cbox;
-			$.each(response.values, function(key, v){
-			cbox = 	'<option value="'+v.position_id+'">' + v.position_name + '</option>';
-			$('#position').append(cbox);
-			});
-		}
-	});
-
-	$('.my-cb').click(function(){
-		var idx = $(this).data('index');
-		var isDisabled = !$(this).prop('checked');
-		$($('.from-time')[idx]).prop('disabled', isDisabled);
-		$($('.to-time')[idx]).prop('disabled', isDisabled);
-	});
-
-	$('.timepicker').change(function(){
-	});
-</script>
-
-
-
-<script type="text/javascript">
-
-
-$("#employee_avatar").change(function(){
-  readURL(this,'#employee_avatar_display');
-
-  $(this).val() ?
-    $("#employee_avatar_remove_cont").html(
-      "<button onclick='removeURL();' type='button' class='img-remove-btn enTrans'>"+
-        "<i class='fa fa-times'></i>"+
-      "</button>"
-    ) : removeURL('featured');
-});
-
-function readURL(input,targetObj) {
-
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-      $(targetObj).css('background', 'url("' + e.target.result + '")');
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-function removeURL(targetObj){
-  var oldPath = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
-
-  $("#employee_avatar").val("");
-  $("#employee_avatar_remove_cont").html("");
-  $("#employee_avatar_display").css('background', 'url("'+oldPath+'") #676767');
-}
-</script>
+<script src="subpages/employees/edit_employee.js"></script>
+<script src="subpages/employees/add_edit_shared_controls.js"></script>

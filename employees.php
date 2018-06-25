@@ -11,18 +11,19 @@
 <script type="text/javascript">
 	function load_employee()
 	{
-		$("#main-content-container").load("./subpages/employees/load_employee.php");
+		$("#main-content-container")
+		.load("./subpages/employees/load_employee.php");
 	}
 	function load_add_employee()
 	{
-		$("#main-content-container").load("./subpages/employees/load_add_employee.php");
+		$("#main-content-container")
+		.load("./subpages/employees/load_add_employee.php");
 	}
 	function load_employee_profile(employee_id)
 	{
-		$("#main-content-container").load("./subpages/employees/load_employee_profile.php?employee_id="+employee_id);
+		$("#main-content-container")
+		.load("./subpages/employees/load_employee_profile.php?employee_id="+employee_id);
 	}
 
-	// load_employee();
-	load_employee_profile(1);
-	// load_add_employee();
+	load_employee();
 </script>

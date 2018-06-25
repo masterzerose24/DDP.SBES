@@ -1,4 +1,4 @@
-$('.timepicker').timepicker({showInputs: false});
+// $('.timepicker').timepicker({showInputs: false});
 	$('.from-time').val('8:00 AM');
 	$('.to-time').val('5:00 PM');
 
